@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +50,70 @@ namespace QuickSort
             temp = arr[x];
             arr[x] = arr[y];
             arr[y] = temp;
+        }
+        public void q_sort(int low, int high)
+        {
+            int pivot, i, j;
+            if (low > high)
+                return;
+
+            i = low + 1;
+            j = high;
+
+            pivot = arr[low];
+
+            while (i <= j)
+            {
+                //Search for an element greater than pivot
+                while ((arr[i] <= pivot) && (i <= high))
+                {
+                    i++;
+                    cmp_count++;
+                }
+                cmp_count++;
+
+                //search for an element less than or equal to pivot
+                while ((arr[j] > pivot) && (j >= low))
+                {
+                    j--;
+                    cmp_count++;
+
+                }
+                cmp_count++;
+
+                if (i < j) // if the greater element is on the left of the element
+                {
+                    //Swap the element at index i whit the element at index j
+                    swap(i, j);
+                    mov_count++;
+                }
+            }
+            //j now cobtains the index of the last element in the sorted list
+
+            if (low < j)
+            {
+                //move the pivot to its correct position in the list
+                swap(low, j);
+                mov_count++;
+            }
+            //sort the list on the left of pivot using quick sort
+            q_sort(low, j - 1);
+
+            //Sort the list on the right of pivot using quick sort
+            q_sort(j + 1, high);
+        }
+        void display()
+        {
+            Console.WriteLine("\n---------------------");
+            Console.WriteLine(" Sorted array elements ");
+            Console.WriteLine("\n---------------------");
+
+            for (int j = 0; j< n; j++)
+            {
+                Console.WriteLine(arr[j]);
+            }
+            Console.WriteLine("\nNumber of comparisons : " + cmp_count);
+            Console.WriteLine("\nNumber of data movemenets:" + mov_count);
         }
     }
 }
